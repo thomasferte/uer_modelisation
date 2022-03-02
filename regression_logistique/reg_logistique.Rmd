@@ -1,0 +1,555 @@
+---
+title: "UER Modélisation"
+subtitle: "Régression logistique"
+author: "Thomas Ferté"
+date: "26/02/2022"
+output:
+  beamer_presentation:
+    theme: "Berlin"
+    colortheme: "dolphin"
+    slide_level: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+set.seed(1)
+# devtools::install_github("AckerDWM/gg3D")
+library(dplyr)
+library(ggplot2)
+library(gg3D)
+```
+
+# Rappels
+
+## Montre moi tes données ...
+
+```{r simustartsimple, fig.height=5}
+n = 10^3
+dfstartsimple <- data.frame(age = runif(n = n, min = 20, max = 90),
+                            sexe = rbinom(n = n, size = 1, prob = 0.5)) %>%
+  mutate(VO2max = 35 + 5*sexe - age/10 + rnorm(n = n, sd = 3),
+         sexe = factor(sexe, levels = c(0, 1), labels = c("femme", "homme")))
+
+ggplot(dfstartsimple, mapping = aes(x = age, y = VO2max, color = sexe)) +
+  geom_point()
+```
+
+## ... je te montrerais mon modèle
+
+\tiny
+
+```{r}
+model_start_simple <- lm(VO2max ~ sexe + age, data = dfstartsimple)
+
+equatiomatic::extract_eq(model_start_simple)
+
+summary(model_start_simple)
+```
+
+## Et bien sur je vérifierai les hypothèses
+
+```{r fig.height=6}
+par(mfrow = c(2,2))
+## Normalité
+# Histogramme des résidus
+hist(model_start_simple$residuals, breaks = 20,
+     xlab = "Residual",
+     ylab = 'Frequency',
+     main = 'Histogram of Residual')
+# Q-Q plot des résidus
+plot(model_start_simple, which = 2)
+
+## Homoscédasticité
+# Nuage de point des résidus en fonction des valeurs de prédites de y
+plot(model_start_simple$residuals ~ model_start_simple$fitted.values,
+     xlab = "Fitted value",
+     ylab = 'Residual')
+
+## Linéarité
+plot(model_start_simple$residuals ~ dfstartsimple$age,
+     xlab = "Age",
+     ylab = 'Residual')
+```
+
+# Modèle statistique
+
+## Intuition
+
+```{r fig.height=5}
+expit <- function(x) exp(x)/(1+exp(x))
+logit <- function(x) log(x/(1-x))
+
+dfintuition <- data.frame(age = c(-10, -7, -3, -1.5, -1, 1, 2, 3, 6, 10),
+                          demence = c(0, 0, 0, 1, 0, 1, 0, 1, 1, 1)) %>%
+  mutate(age = age +60)
+
+p_intuition <- ggplot(dfintuition, mapping = aes(x = age, y = demence)) +
+  geom_point() +
+  geom_function(fun = function(x) (x-60)*0.05+0.5, aes(color = "linear")) +
+  geom_function(fun = function(x) expit(x-60), aes(color = "logistic")) +
+  scale_y_continuous(breaks = c(0, 1))
+
+p_intuition
+```
+
+Linéaire : $f_{linear}(x) = \beta_0 + \beta_1 \times x = \eta(x)$
+
+Logistique : $f_{logistic}(x) = P(Dementia = 1|x) = \frac{e^{\eta(x)}}{1+e^{\eta(x)}}$
+
+## Logit - exercice
+
+On définit la fonction logit telle que : $Logit(x) = log (\frac{x}{1-x})$
+
+Montrez que $Logit(\frac{e^{\eta}}{1+e^{\eta}}) = \eta$
+
+NB : $log(e^a) = a$
+
+## Logit - solution
+
+On définit la fonction logit telle que : $Logit(x) = log (\frac{x}{1-x})$
+
+Montrez que $Logit(\frac{e^{\eta}}{1+e^{\eta}}) = \eta$
+
+$$
+\begin{aligned}
+Logit(\frac{e^{\eta}}{1+e^{\eta}}) & = log (\frac{\frac{e^{\eta}}{1+e^{\eta}}}{1-\frac{e^{\eta}}{1+e^{\eta}}}) \\
+& = log (\frac{\frac{e^{\eta}}{1+e^{\eta}}}{\frac{1+e^{\eta}}{1+e^{\eta}}-\frac{e^{\eta}}{1+e^{\eta}}}) \\
+& = log (\frac{\frac{e^{\eta}}{1+e^{\eta}}}{\frac{1}{1+e^{\eta}}}) \\
+& = log (e^{\eta}) \\
+& = \eta
+\end{aligned}
+$$
+
+## Spécification du modèle
+
+2 spécifications équivalentes :
+
+$P(Y_i = 1|X_i) = \frac{e^{\beta_0 + \beta_1 X_{i1} + ... + \beta_p X_{ip}}}{1+e^{\beta_0 + \beta_1 X_{i1} + ... + \beta_p X_{ip}}}$
+
+$Logit(P(Y_i = 1|X_i)) = \beta_0 + \beta_1 X_{i1} + ... + \beta_p X_{ip}$
+
+## Spécification du modèle - exemple démence
+
+```{r fig.height=4}
+p_intuition
+```
+
+2 spécifications équivalentes :
+
+$P(Cognition_i = démence|age_i) = \frac{e^{\beta_0 + \beta_1 age_{i}}}{1+e^{\beta_0 + \beta_1 age_{i}}}$
+
+$Logit(P(Cognition_i = démence|age_i)) = \beta_0 + \beta_1 age_{i}$
+
+## Odd-ratio - exercice
+
+A partir de l'expression suivante : $Logit(P(Y_i = 1|X_i)) = \beta_0 + \beta_1 X_{i}$
+
+Montrez que : $RC = e^{\beta_1} = \frac{P(Y_i = 1|X_i=1)/(1-P(Y_i = 1|X_i=1))}{P(Y_i = 1|X_i=0)/(1-P(Y_i = 1|X_i=0))}$
+
+PS : $log(a) - log(b) = log(a/b)$
+
+## Odd-ratio - solution
+
+A partir de $Logit(P(Y_i = 1|X_i)) = \beta_0 + \beta_1 X_{i}$ on a :
+
+$Logit(P(Y_i = 1|X_i = 0)) = \beta_0 + \beta_1 \times 0 = \beta_0$
+
+$Logit(P(Y_i = 1|X_i = 1)) = \beta_0 + \beta_1 \times 1 = \beta_0 + \beta_1$
+
+En faisant une soustraction membre à membre on a :
+
+$$
+\begin{aligned}
+\beta_1 & = Logit(P(Y_i|X_i = 1)) -  Logit(P(Y_i|X_i = 0)) \\
+& = log(\frac{P(Y_i|X_i = 1)}{1-P(Y_i|X_i = 1)}) - log(\frac{P(Y_i|X_i = 0)}{1-P(Y_i|X_i = 0)}) \\
+& = log(\frac{P(Y_i = 1|X_i=1)/(1-P(Y_i = 1|X_i=1))}{P(Y_i = 1|X_i=0)/(1-P(Y_i = 1|X_i=0))})
+\end{aligned}
+$$
+On a bien : $RC = e^{\beta_1} = \frac{P(Y_i = 1|X_i=1)/(1-P(Y_i = 1|X_i=1))}{P(Y_i = 1|X_i=0)/(1-P(Y_i = 1|X_i=0))}$
+
+## Odd-ratio - interprétation des coefficients
+
+- $\beta_0$ : permet de calculer la probabilité chez les non-exposés égale à $e^{\beta_0}/(1+e^{\beta_0})$
+- $e^{\beta_1}$ : correspond au rapport de côte entre les exposés et les non-exposés (variable binaire) ou bien pour l'augmentation d'une unité d'une variable quantitative.
+
+# Spécification du modèle
+
+## Cadre général
+
+On retrouve une formulation proche du modèle de régression linéaire :
+
+$Logit(P(Y_i = 1|X_i)) = \beta_0 + \beta_1 X_{i1} + ... + \beta_p X_{ip}$
+
+## Indicatrices
+
+Les variables catégorielles à plusieurs modalités sont codées sous la forme d'indicatrice.
+
+Exemple :
+
+La survenue de cancer du poumon en fonction du statut tabagique codé _non fumeur_, _tabagisme actif_, _tabagisme passif_ sécrira :
+
+\small
+
+$Logit(P(Cancer_i = 1|X_i)) = \beta_0 + \beta_1 TabagismeActif_{i} + \beta_2 TabagismePassif_{i}$
+
+\normalsize	
+
+$e^{\beta_1}$ s'interprète comme le rapport de cote du cancer du poumon des fumeurs actifs par rapport aux noms fumeurs.
+
+$e^{\beta_2}$ s'interprète comme le rapport de cote du cancer du poumon des fumeurs passigs par rapport aux noms fumeurs.
+
+## Modification d'effet
+
+Les modifications d'effet s'écrivent comme dans un modèle linéaire
+
+Exemple :
+
+La survenue de cancer du poumon dépend de la _consommation_ en paquet-année avec un effet différent selon le _sexe_ :
+
+\small
+
+$Logit(P(Cancer_i = 1|X_i)) = \beta_0 + \beta_1 Consommation_{i} + \beta_2 Homme_{i} + \beta_3 Consommation_i \times Homme_i$
+
+\normalsize	
+
+$e^{\beta_1}$ s'interprète comme le rapport de cote de l'augmentation de 1 paquet-année chez les femmes sur le risque de cancer du poumon.
+
+$e^{\beta_1 + \beta_3}$ s'interprète comme le rapport de cote de l'augmentation de 1 paquet-année chez les hommes sur le risque de cancer du poumon.
+
+## Facteur de confusion et choix des variables
+
+Comme pour le modèle linéaire, les variables explicatives d'un modèle sont :
+
+- L'exposition d'intérêt
+- Ses éventuels modificateurs d'effet
+- Les éventuels facteurs de confusion de la relation entre l'exposition et la maladie
+
+# Estimation du modèle et tests statistiques
+
+## Vraisemblance et maximum de vraisemblance - intuition (1)
+
+\footnotesize	
+
+On veut savoir quelle est la probabilité que le personnage de Sean Bean meurt dans un film. Pour cela on a répertorié tous les films dans lesquels il a joué et on a regardé s'il était ou non décédé.
+
+```{r}
+n_film <- 100
+df_SeanBean <- data.frame(film_id = seq(1, n_film, by = 1),
+                          death = rbinom(n = n_film, size = 1, prob = 0.3))
+
+df_SeanBean[1:4,] %>%
+  knitr::kable(booktabs = T)
+```
+
+Première méthode, on calcul simplement cette probabilité :
+
+```{r echo = TRUE}
+sum(df_SeanBean$death == 1)/nrow(df_SeanBean)
+```
+Deuxième solution : le maximum de vraisemblance !
+
+## Vraisemblance et maximum de vraisemblance - intuition (2)
+
+\footnotesize	
+
+La vraisemblance correspond à la probabilité d'observer une réalisation particulière de l'échantillon pour une valeur des paramètre donnée.
+
+Ici, on considère que les données suivent une loi de Bernouilli (pile ou face) de paramètre $\pi$
+
+La vraisemblance pour un individu est $\pi$ s'il a fait l'évenement et $1-\pi$ s'il n'a pas fait l'événement. On peut donc la noter :
+
+$$\mathcal{L}(\pi;y_i) = \pi^{y_i}\times (1-\pi)^{1-y_i}$$
+
+La vraisemblance pour l'ensemble des individus est donc :
+
+$\mathcal{L}(\pi;y) = \mathcal{L}(\pi;y_1) \times ... \times  \mathcal{L}(\pi;y_n) = \prod^n_{i=1} \mathcal{L}(\pi;y_n) = \prod^n_{i=1} \pi^{y_i}\times (1-\pi)^{1-y_i}$
+
+## Vraisemblance et maximum de vraisemblance - intuition (3)
+
+\footnotesize	
+
+A partir de cela on peut faire un graphique montrant la vraisemblance en fonction de la valeur du paramètre $\pi$
+
+```{r fig.height=5}
+vec_pi <- seq(0.01, 0.99, by = 0.01)
+
+vraisemblance_sean_bean <- function(pi, y) pi^y*(1-pi)^(1-y)
+
+vec_log_vraisemblance <- lapply(vec_pi,
+                                FUN = function(pi) vraisemblance_sean_bean(pi = pi,
+                                                                           y = df_SeanBean$death) %>%
+                                  log() %>%
+                                  sum) %>%
+  unlist()
+
+minpoint <- c(max(vec_log_vraisemblance), vec_pi[which.max(vec_log_vraisemblance)])
+
+data.frame(log_vraisemblance = vec_log_vraisemblance,
+           pi = vec_pi) %>%
+  ggplot(mapping = aes(x = pi, y = log_vraisemblance)) +
+  geom_line() +
+  geom_point(x = minpoint[2], y = minpoint[1], color = "red") +
+  annotate(x = minpoint[2], y = minpoint[1]-300, geom = "text", label = paste0(round(minpoint, 1), collapse = " ; "), color = "red")
+
+```
+On retrouve la valeur de la première méthode.
+
+## Vraisemblance d'un modèle logistique - exemple démence
+
+Même principe pour une régression logistique :
+
+$\mathcal{L}(\pi;y) = \prod^n_{i=1} \pi^{y_i}\times (1-\pi)^{1-y_i}$ avec $\pi_i = \frac{e^{\beta_0 + \beta_1 age_i}}{1+e^{\beta_0 + \beta_1 age_i}}$
+
+```{r fig.height=5}
+# data
+n <- 1000
+dfintuition <- data.frame(age_10 = runif(n = n, min = 40, max = 100)/10) %>%
+  mutate(demence_proba = expit(-5 + age_10/2),
+         demence = rbinom(prob = demence_proba, size = 1, n = nrow(.)))
+
+## log vraisemblance
+log_vraisemblance_log <- function(beta_0, beta_1, y, x){
+  pred_linear <- beta_0 + beta_1*x
+  res <- y*pred_linear - log(1+exp(pred_linear))
+  return(res)
+}
+
+## parameters
+vec_beta_0 <- seq(-10, 10, by = 1)
+vec_beta_1 <- seq(-1, 1, by = 0.1)
+
+dfBeta <- expand.grid(beta_0 = vec_beta_0, beta_1 = vec_beta_1)
+
+vec_log_vraisemblance <- apply(dfBeta, MARGIN = 1, FUN = function(row){
+  log_vraisemblance_log(beta_0 = row[["beta_0"]],
+                        beta_1 = row[["beta_1"]],
+                        y = dfintuition$demence,
+                        x = dfintuition$age_10) %>%
+    sum()
+})
+
+dfplotLogistiqueRegression <- dfBeta %>%
+  mutate(log_vraisemblance = vec_log_vraisemblance,
+         max_log_vraisemblance = log_vraisemblance == max(vec_log_vraisemblance))
+
+ggplot(dfplotLogistiqueRegression, aes(x=beta_0, y= beta_1, z= log_vraisemblance, color = max_log_vraisemblance)) + 
+  axes_3D() +
+  stat_3D() +
+  gg3D::axis_labs_3D() +
+  theme(legend.position = "bottom")
+```
+
+## Intervalles de confiance
+
+Les paramètres $\widehat\beta$ suivent une loi normale de variance $\widehat{var}(\widehat\beta_j)$ tel que l'intervalle de confiance au risque $\alpha$ est défini tel que :
+
+$[\widehat \beta_j \pm z_{\alpha/2} \sqrt{\widehat{var}(\widehat\beta_j)}]$
+
+## Tests statistiques
+
+- Test global : Rapport de vraisemblance (+++), Wald, Score
+- Apport d'une variable : Wald (+++), Rapport de vraisemblance, Score
+- Apport d'un ensemble de variables : Rapport de vraisemblance (+++), Wald, Score
+
+## Tests statistiques - Wald (un seul paramètre)
+
+Soit $\widehat\beta_1$ l'estmateur du coefficient $\beta_1$ par le modèle et $SE_{\widehat\beta_1}$ sont erreur standard associée alors la statistique de test de wald est définie comme :
+
+$Wald = \frac{\widehat\beta_1}{SE_{\widehat\beta_1}}$
+
+et suit une loi du Chi-2 à 1 ddl.
+
+## Tests statistiques - Log-vraisemblance (comparaison de modèle)
+
+Soit $m2$ le modèle complet et $m1$ le modèle restreint, le rapport de vraisemblance est défini comme :
+
+$RV = 2\times (loglik(m2)-loglik(m1))$
+
+Dans ce cas $RV$ suit une loi du Ch-2 avec un ddl égal à la différence du nombre de paramètres ($\beta$) entre les deux modèles.
+
+## Tests statistiques - Score (un seul paramètre)
+
+Soit $\beta$ le paramètre de la régression logisitique à tester. Soit $U(\beta)$ la dérivée première de la vraisemblance du modèle selon ce paramètre et $I(\beta)$ l'opposée de l'espérance de la dérivée seconde de la vraisemblance de ce paramètre. Alors la statistique du score est définie telle que :
+
+$Score = \frac{U(\beta)^2}{I(\beta)}$
+
+et suit une loi du Chi-2 à 1 ddl
+
+# Hypothèses
+
+## Hypothèses du modèle
+
+- Log-linéarité : comme pour le modèle de régression linéaire, il faut vérifier la log-linéarité des $\beta$ pour les variables quantitatives.
+- Indépendance des individus
+
+## Calibration - test Hosmer et Lemeshow
+
+\tiny
+
+Compare la probabilité prédite et la proportion de réussite de l'outcome.
+
+```{r echo = TRUE}
+vec_proba <- runif(n = 1000, min = 0, max = 1)
+vec_res <- rbinom(n = 1000, size = 1, prob = vec_proba)
+hoslem <- generalhoslem::logitgof(vec_res, vec_proba)
+hoslem
+```
+
+```{r fig.height=3}
+cbind(hoslem$expected, hoslem$observed) %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column(var = "group") %>%
+  mutate(prop_theo = yhat1/(yhat0 + yhat1),
+         prop_obs = y1/(y0 + y1)) %>%
+  ggplot(mapping = aes(x = prop_theo, y = prop_obs, label = group)) +
+  geom_point() +
+  geom_text(nudge_y = +0.1) +
+  geom_function(fun = function(x) x, color = "red") +
+  labs(x = "Proportion théorique", y = "Proportion estimée par la régression")
+```
+
+## Performance - AUC
+
+```{r fig.height=4}
+roc_curve <- PRROC::roc.curve(scores.class0 = vec_proba, weights.class0 = vec_res, curve = TRUE)
+plot(roc_curve)
+```
+
+$Se = \frac{VP}{VP+FN}$
+
+$FPR = 1 - Sp = 1- \frac{VN}{VN+FP}$
+
+## Performance - AUPRC
+
+```{r fig.height=4}
+pr_curve <- PRROC::pr.curve(scores.class0 = vec_proba, weights.class0 = vec_res, curve = TRUE)
+plot(pr_curve)
+```
+
+$Recall = Se = \frac{VP}{VP+FN}$
+
+$Precision = VPP = \frac{VP}{VP+FP}$
+
+# Exemple
+
+## Données
+
+On s'intéresse au lien entre l'IMC et le décès. Pour cela, on a recueilli des informations sur l'âge des patients (en dizaine d'années) et sur leur IMC et on a recueilli leur statut vital à 6 mois.
+
+```{r}
+n = 10^4
+df_reg_log <- data.frame(age_10 = runif(n = n, min = 2, max = 10),
+                         IMC = runif(n = n, min = 13, max = 40)) %>%
+  mutate(proba_deces = expit(-5 + age_10/4 + 0.2*(IMC/10)^2),
+         deces = rbinom(n = n, size = 1, prob = proba_deces))
+
+df_reg_log %>%
+  select(-proba_deces) %>%
+  head() %>%
+  knitr::kable(booktabs = TRUE)
+```
+
+
+## Spécification du modèle - exercice
+
+On s'intéresse au lien entre l'IMC et le décès. Pour cela, on a recueilli des informations sur l'âge des patients et sur leur IMC et on a recueilli leur statut vital à 6 mois.
+
+Ecrivez le modèle correspondant
+
+## Spécification du modèle - solution
+
+$Logit(P(Décès_i = 1|IMC_i, Age_i)) = \beta_0 + \beta_1 Age_i + \beta_2 IMC_i$
+
+## Fit du modèle
+
+```{r echo = TRUE}
+fit <- glm(deces ~ age_10 + IMC, family = "binomial", data = df_reg_log)
+summary(fit)
+```
+
+## Hypothèses à vérifier
+
+\tiny
+
+Indépendance -> ok
+
+Linéarité
+
+```{r echo = TRUE}
+library(mfp)
+fp_reg_log <- mfp::mfp(formula = deces ~ fp(age_10) + fp(IMC), family = "binomial", data = df_reg_log)
+
+glm_reg_log <- glm(fp_reg_log$formula, family = "binomial", data = df_reg_log)
+
+summary(glm_reg_log)
+```
+
+## Calibration
+
+\tiny
+
+```{r fig.height=2, echo = TRUE}
+hoslem_test <- generalhoslem::logitgof(df_reg_log$deces, fitted(fp_reg_log))
+
+cbind(hoslem_test$expected, hoslem_test$observed) %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column(var = "group") %>%
+  mutate(prop_theo = yhat1/(yhat0 + yhat1),
+         prop_obs = y1/(y0 + y1)) %>%
+  ggplot(mapping = aes(x = prop_theo, y = prop_obs, label = group)) +
+  geom_point() +
+  geom_text(nudge_y = +0.1) +
+  geom_function(fun = function(x) x, color = "red") +
+  annotate(label = paste0("p-val HL test : ", round(hoslem_test$p.value, 3)),
+           x = 0.5, y = 1, geom = "text") +
+  labs(x = "Proportion théorique", y = "Proportion estimée") +
+  lims(x= c(0,1), y=c(0,1))
+
+```
+
+## Performances ROC curve
+
+\tiny
+
+```{r echo = TRUE, fig.height=4}
+roc_curve <- PRROC::roc.curve(scores.class0 = fitted(fp_reg_log),
+                              weights.class0 = df_reg_log$deces, curve = TRUE)
+
+plot(roc_curve, color = FALSE)
+```
+
+## Performances PR curve
+
+\tiny
+
+```{r echo = TRUE, fig.height=4}
+
+pr_curve <- PRROC::pr.curve(scores.class0 = fitted(fp_reg_log),
+                            weights.class0 = df_reg_log$deces, curve = TRUE)
+
+plot(pr_curve, color = FALSE)
+
+```
+
+## Interprétation du modèle
+
+\tiny
+
+```{r}
+broom::tidy(glm_reg_log, conf.int = TRUE) %>%
+  knitr::kable(digits = 3, booktabs = TRUE)
+```
+
+## Prédiction
+
+On peut se poser la question de la probabilité prédite par le modèle de faire un événement pour un individu de 28 ans avec un IMC à 18
+
+```{r echo = TRUE}
+df_new <- data.frame(IMC = 18,
+                     age_10 = 2.8)
+predict(glm_reg_log, df_new, type = "response")
+```
+
+## Fin
+
+Questions ?
