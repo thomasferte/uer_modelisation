@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2022.2.26)  2 MAR 2022 15:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2022.2.26)  3 MAR 2022 19:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1081,57 +1081,13 @@ LaTeX Warning: Command \` invalid in math mode on input line 625.
 ]
 \openout4 = `reg_logistique.vrb'.
 
-(./reg_logistique.vrb
-Overfull \hbox (141.11134pt too wide) in paragraph at lines 34--34
-[]\T1/lmtt/m/n/10.95 ## glm(formula = deces ~ age_10 + IMC, family = "binomial", data = df_reg_log)[] 
- []
-
-
-Overfull \hbox (14.6392pt too wide) in paragraph at lines 34--34
-[]\T1/lmtt/m/n/10.95 ## (Intercept) -6.324358   0.168015  -37.64   <2e-16 ***[] 
- []
-
-
-Overfull \hbox (14.6392pt too wide) in paragraph at lines 34--34
-[]\T1/lmtt/m/n/10.95 ## age_10       0.233652   0.013366   17.48   <2e-16 ***[] 
- []
-
-
-Overfull \hbox (14.6392pt too wide) in paragraph at lines 34--34
-[]\T1/lmtt/m/n/10.95 ## IMC          0.109390   0.004278   25.57   <2e-16 ***[] 
- []
-
-
-Overfull \hbox (66.3778pt too wide) in paragraph at lines 34--34
-[]\T1/lmtt/m/n/10.95 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1[] 
- []
-
-
-Overfull \hbox (31.8854pt too wide) in paragraph at lines 34--34
-[]\T1/lmtt/m/n/10.95 ## (Dispersion parameter for binomial family taken to be 1)[] 
- []
-
-
-Overfull \hbox (20.38794pt too wide) in paragraph at lines 34--34
-[]\T1/lmtt/m/n/10.95 ##     Null deviance: 8578.1  on 9999  degrees of freedom[] 
- []
-
-
-Overfull \hbox (20.38794pt too wide) in paragraph at lines 34--34
-[]\T1/lmtt/m/n/10.95 ## Residual deviance: 7504.8  on 9997  degrees of freedom[] 
- []
-
-)
-Overfull \vbox (151.31898pt too high) detected at line 661
- []
-
-[39
+(./reg_logistique.vrb) [39
 
 ]
 \openout4 = `reg_logistique.vrb'.
 
 (./reg_logistique.vrb)
-Overfull \vbox (36.22287pt too high) detected at line 707
+Overfull \vbox (8.62286pt too high) detected at line 705
  []
 
 [40
@@ -1142,7 +1098,7 @@ Overfull \vbox (36.22287pt too high) detected at line 707
 (./reg_logistique.vrb
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <6> not available
 (Font)              Font shape `T1/lmtt/b/n' tried instead on input line 17.
-<reg_logistique_files/figure-beamer/unnamed-chunk-16-1.pdf, id=2523, 722.7pt x 144.54pt>
+<reg_logistique_files/figure-beamer/unnamed-chunk-16-1.pdf, id=2522, 722.7pt x 144.54pt>
 File: reg_logistique_files/figure-beamer/unnamed-chunk-16-1.pdf Graphic file (type pdf)
 <use reg_logistique_files/figure-beamer/unnamed-chunk-16-1.pdf>
 Package pdftex.def Info: reg_logistique_files/figure-beamer/unnamed-chunk-16-1.pdf  used on input line 25.
@@ -1153,7 +1109,7 @@ Package pdftex.def Info: reg_logistique_files/figure-beamer/unnamed-chunk-16-1.p
 \openout4 = `reg_logistique.vrb'.
 
 (./reg_logistique.vrb
-<reg_logistique_files/figure-beamer/unnamed-chunk-17-1.pdf, id=2587, 722.7pt x 289.08pt>
+<reg_logistique_files/figure-beamer/unnamed-chunk-17-1.pdf, id=2586, 722.7pt x 289.08pt>
 File: reg_logistique_files/figure-beamer/unnamed-chunk-17-1.pdf Graphic file (type pdf)
 <use reg_logistique_files/figure-beamer/unnamed-chunk-17-1.pdf>
 Package pdftex.def Info: reg_logistique_files/figure-beamer/unnamed-chunk-17-1.pdf  used on input line 14.
@@ -1164,7 +1120,7 @@ Package pdftex.def Info: reg_logistique_files/figure-beamer/unnamed-chunk-17-1.p
 \openout4 = `reg_logistique.vrb'.
 
 (./reg_logistique.vrb
-<reg_logistique_files/figure-beamer/unnamed-chunk-18-1.pdf, id=2652, 722.7pt x 289.08pt>
+<reg_logistique_files/figure-beamer/unnamed-chunk-18-1.pdf, id=2651, 722.7pt x 289.08pt>
 File: reg_logistique_files/figure-beamer/unnamed-chunk-18-1.pdf Graphic file (type pdf)
 <use reg_logistique_files/figure-beamer/unnamed-chunk-18-1.pdf>
 Package pdftex.def Info: reg_logistique_files/figure-beamer/unnamed-chunk-18-1.pdf  used on input line 14.
@@ -1196,14 +1152,14 @@ Package rerunfilecheck Info: File `reg_logistique.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  26307 strings out of 480216
- 515270 string characters out of 5894809
- 818885 words of memory out of 5000000
+ 515288 string characters out of 5894809
+ 818883 words of memory out of 5000000
  43425 multiletter control sequences out of 15000+600000
  549140 words of font info for 145 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  99i,19n,104p,1011b,779s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}</home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on reg_logistique.pdf (46 pages, 812891 bytes).
+Output written on reg_logistique.pdf (46 pages, 808391 bytes).
 PDF statistics:
  3018 PDF objects out of 3580 (max. 8388607)
  2816 compressed objects within 29 object streams

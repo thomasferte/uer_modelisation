@@ -462,18 +462,16 @@ $Logit(P(Décès_i = 1|IMC_i, Age_i)) = \beta_0 + \beta_1 Age_i + \beta_2 IMC_i$
 
 ## Fit du modèle
 
+\tiny
+
 ```{r echo = TRUE}
 fit <- glm(deces ~ age_10 + IMC, family = "binomial", data = df_reg_log)
 summary(fit)
 ```
 
-## Hypothèses à vérifier
+## Hypothèses à vérifier - linéarité
 
 \tiny
-
-Indépendance -> ok
-
-Linéarité
 
 ```{r echo = TRUE}
 library(mfp)
