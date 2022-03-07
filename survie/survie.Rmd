@@ -17,6 +17,8 @@ set.seed(1)
 library(dplyr)
 library(ggplot2)
 library(gg3D)
+library(survival)
+library(survminer)
 ```
 
 # Rappels
@@ -70,6 +72,10 @@ $$Logit(P(Dementia_i = 1)) = \beta_0 + \beta_1 age_i + \beta2 sexe_i$$
 
 # Intuition
 
+## Diagnostique et décès
+
+\tiny
+
 On s'intéresse au lien entre le diagnostic d'un cancer et le décès d'un patient pour cela on recueil les données de plusieurs patients :
 
 ```{r fig.height=4}
@@ -91,8 +97,30 @@ ggplot(dfsurvIntuition, mapping = aes(x = xstart,
   
 ```
 
+## Représentation en survie
 
+```{r fig.height=4}
+plotsimplsurv <- ggplot(dfsurvIntuition, mapping = aes(x = 0,
+                                      xend = duration,
+                                      y = patient,
+                                      yend = patient)) +
+  geom_segment() +
+  geom_point(mapping = aes(x = duration, color = "death")) +
+  geom_point(mapping = aes(x = 0, color = "diagnosis")) +
+  labs(x = "Durée de suivi depuis diagnostic (mois)")
 
+plotsimplsurv
+```
+
+## Représentation Kaplan Meier
+
+```{r fig.height=6}
+
+fitSurvival <- survfit(formula = Surv(time = duration, event = event) ~ 1, data = dfsurvIntuition)
+p1 <- ggsurvplot(fitSurvival, conf.int = FALSE, palette = "black")
+
+ggpubr::ggarrange(p1$plot, plotsimplsurv)
+```
 
 ## Intuition
 
