@@ -1,6 +1,6 @@
 ---
 title: "UER Modélisation"
-subtitle: "Régression logistique"
+subtitle: "Survie"
 author: "Thomas Ferté"
 date: "26/02/2022"
 output:
@@ -94,508 +94,415 @@ ggplot(dfsurvIntuition, mapping = aes(x = xstart,
   geom_point(mapping = aes(x = xend, color = "death")) +
   geom_point(mapping = aes(x = xstart, color = "diagnosis")) +
   labs(x = "Durée de suivi (mois)")
-  
+
 ```
 
-## Représentation en survie
+## Représentation en temps depuis diagnostic
 
 ```{r fig.height=4}
 plotsimplsurv <- ggplot(dfsurvIntuition, mapping = aes(x = 0,
-                                      xend = duration,
-                                      y = patient,
-                                      yend = patient)) +
+                                                       xend = duration,
+                                                       y = patient,
+                                                       yend = patient)) +
   geom_segment() +
   geom_point(mapping = aes(x = duration, color = "death")) +
   geom_point(mapping = aes(x = 0, color = "diagnosis")) +
-  labs(x = "Durée de suivi depuis diagnostic (mois)")
+  labs(x = "Durée de suivi depuis diagnostic (mois)") +
+  theme(legend.position = "bottom")
 
 plotsimplsurv
 ```
 
 ## Représentation Kaplan Meier
 
-```{r fig.height=6}
+\footnotesize
+
+```{r fig.height=5}
 
 fitSurvival <- survfit(formula = Surv(time = duration, event = event) ~ 1, data = dfsurvIntuition)
-p1 <- ggsurvplot(fitSurvival, conf.int = FALSE, palette = "black")
+p1 <- ggsurvplot(fitSurvival, conf.int = FALSE, palette = "black", legend = "none")
 
-ggpubr::ggarrange(p1$plot, plotsimplsurv)
+ggpubr::ggarrange(p1$plot, plotsimplsurv, nrow = 2)
 ```
 
-## Intuition
+Chaque marche correspond à événement et à une diminution de 20% de la probabilité de survie.
 
-```{r fig.height=5}
-expit <- function(x) exp(x)/(1+exp(x))
-logit <- function(x) log(x/(1-x))
+## Définitions
 
-dfintuition <- data.frame(age = c(-10, -7, -3, -1.5, -1, 1, 2, 3, 6, 10),
-                          demence = c(0, 0, 0, 1, 0, 1, 0, 1, 1, 1)) %>%
-  mutate(age = age +60)
+- *Date des dernières nouvelles* : date la plus récente où l'on a pu recueillir des informations sur un sujet.
+- *Temps de participation = temps de suivi* : délai entre date d'entrée dans l'étude et la date de dernières nouvelles.
+- *Date de point* : date au delà de laquelle on ne tiendra pas compte des informations sur le sujet.
+- *Recul pour une étude* = date de point - date de début de l'étude
+- *Recul pour un sujet* = date de point - date d'entrée dans l'étude
 
-p_intuition <- ggplot(dfintuition, mapping = aes(x = age, y = demence)) +
-  geom_point() +
-  geom_function(fun = function(x) (x-60)*0.05+0.5, aes(color = "linear")) +
-  geom_function(fun = function(x) expit(x-60), aes(color = "logistic")) +
-  scale_y_continuous(breaks = c(0, 1))
+# Mesurer la survie
 
-p_intuition
-```
+## fonction de densité
 
-Linéaire : $f_{linear}(x) = \beta_0 + \beta_1 \times x = \eta(x)$
+Probabilité de faire l'événement à un instant $t$
 
-Logistique : $f_{logistic}(x) = P(Dementia = 1|x) = \frac{e^{\eta(x)}}{1+e^{\eta(x)}}$
+$$f(t) = \lim_{\Delta t \to 0+} \frac{P(t \leq T < t + \Delta t)}{\Delta t}$$
 
-## Logit - exercice
+## fonction de répartition
 
-On définit la fonction logit telle que : $Logit(x) = log (\frac{x}{1-x})$
-
-Montrez que $Logit(\frac{e^{\eta}}{1+e^{\eta}}) = \eta$
-
-NB : $log(e^a) = a$
-
-## Logit - solution
-
-On définit la fonction logit telle que : $Logit(x) = log (\frac{x}{1-x})$
-
-Montrez que $Logit(\frac{e^{\eta}}{1+e^{\eta}}) = \eta$
+Probabilité de faire l'événement avant $t$. Correspond au cumul de $f(t)$ de $0$ à $t$
 
 $$
 \begin{aligned}
-Logit(\frac{e^{\eta}}{1+e^{\eta}}) & = log (\frac{\frac{e^{\eta}}{1+e^{\eta}}}{1-\frac{e^{\eta}}{1+e^{\eta}}}) \\
-& = log (\frac{\frac{e^{\eta}}{1+e^{\eta}}}{\frac{1+e^{\eta}}{1+e^{\eta}}-\frac{e^{\eta}}{1+e^{\eta}}}) \\
-& = log (\frac{\frac{e^{\eta}}{1+e^{\eta}}}{\frac{1}{1+e^{\eta}}}) \\
-& = log (e^{\eta}) \\
-& = \eta
+F(t) & = P(T \leq t) \\
+& = \int_{0}^t f(u)du \\
 \end{aligned}
 $$
 
-## Spécification du modèle
+Expliquez pourquoi $F(0) = 0$ et $\lim_{t \to +\infty} F(t) = 1$
 
-2 spécifications équivalentes :
+## fonction de survie
 
-$P(Y_i = 1|X_i) = \frac{e^{\beta_0 + \beta_1 X_{i1} + ... + \beta_p X_{ip}}}{1+e^{\beta_0 + \beta_1 X_{i1} + ... + \beta_p X_{ip}}}$
+La fonction de survie correspond à la probabilité de ne pas avoir encore fait l'événement à l'instant $t$
 
-$Logit(P(Y_i = 1|X_i)) = \beta_0 + \beta_1 X_{i1} + ... + \beta_p X_{ip}$
+$$S(t) = P(T>t) = 1 - F(t)$$
 
-## Spécification du modèle - exemple démence
+## fonction de risque
+
+\footnotesize	
+
+Elle correspond à la probabilité de faire l'événement à l'instant $t$ sachant que le patient est toujours indemne juste avant cet instant. On parle de fonction de risque instantané.
+
+$$
+\begin{aligned}
+\alpha(t) & = \lim_{\Delta t \to 0+}  \frac{P(t \leq T < t+\Delta t|T \geq t)}{\Delta t} \\
+& = \lim_{\Delta t \to 0+}  \frac{P(T \geq t | t \leq T < t+\Delta t)P(t \leq T < t+\Delta t)}{\Delta t \times P(T \geq t)} \leftarrow	\text{ Bayes theorem} \\
+& = \lim_{\Delta t \to 0+}  \frac{1 \times P(t \leq T < t+\Delta t)}{\Delta t \times P(T \geq t)} \\
+& = \lim_{\Delta t \to 0+}  \frac{P(t \leq T < t+\Delta t)}{\Delta t}  \times \frac{1}{P(T \geq t)} \\
+& = \frac{f(t)}{S(t)}
+\end{aligned}
+$$
+
+Bayes theorem : $P(A|B) = \frac{P(B|A)P(A)}{P(B)}$
+
+## fonction de risque (2)
+
+\footnotesize	
+
+$S(t) = 1 - F(t) = 1 - \int_0^t f(u)du$
+
+En dérivant on obtient : $\frac{dS(t)}{dt} = 0 - f(t) = -f(t)$
+
+Par ailleurs
+
+$$
+\begin{aligned}
+\alpha(t) &= \frac{f(t)}{S(t)} \\
+& = - \frac{dS(t)}{dt} \times \frac{1}{S(t)} \\
+& = - \frac{d}{dt}log(S(t))
+\end{aligned}
+$$
+
+NB: $\frac{d}{dx}log(f(x)) = \frac{1}{f(x)} \times \frac{d}{dx}f(x)$
+
+## fonction de risque (3)
+
+On a $\alpha(t) = - \frac{d}{dt}log(S(t))$ si on poursuit :
+
+$$
+\begin{aligned}
+\alpha(t) &= - \frac{d}{dt}log(S(t)) \\
+\int_0^t\alpha(u)du &= - log(S(t)) \\
+- \int_0^t\alpha(u)du &= log(S(t)) \\
+exp(- \int_0^t\alpha(u)du) &= exp(log(S(t))) \\
+exp(- \int_0^t\alpha(u)du) &= S(t) \\
+\end{aligned}
+$$
+
+## fonction de risque cumulé
+
+Elle correspond au cumul de la fonction précédente :
+
+$$A(t) =  \int_0^t \alpha(u)du$$
+
+## Exercice
+
+Soit un risque instantané constant $\alpha(t) = \lambda$
+
+Trouvez la fonction de densité, la fonction de répartition, la fonction de survie, la fonction de risque cumulée.
+
+Aide :
+
+$f(t) = S(t) \times \alpha(t)$
+
+$F(t) = 1 - S(t)$
+
+$S(t) = exp(-\int_0^t \alpha(u) du)$
+
+$A(t) = \int_0^t \alpha(u) du$
+
+## Exercice - Solution
+
+\tiny
+
+$S(t) = exp(-\int_0^t \alpha(u) du) = exp(-\int_0^t \lambda) = exp(-\lambda t)$
+
+$A(t) = \int_0^t \alpha(u) du = \int_0^t \lambda du = \lambda t$
+
+$F(t) = 1 - S(t) = 1 - exp(-\lambda t)$
+
+$f(t) = S(t) \times \alpha(t) = exp(-\lambda t) \times \lambda$
 
 ```{r fig.height=4}
-p_intuition
+dfExpsurvival <- data.frame(time = seq(0,100, by = 0.1),
+                            alphat = 0.01) %>%
+  mutate(instant_risk = time^0*alphat,
+         survival_risk = exp(-alphat*time),
+         cumulated_instant_risk = -log(survival_risk),
+         repartition = 1 - survival_risk,
+         density = survival_risk*instant_risk) %>%
+  tidyr::pivot_longer(cols = instant_risk:density)
+
+ggplot(dfExpsurvival, mapping = aes(x = time, y = value)) +
+  geom_line() +
+  facet_wrap(name ~ ., scales = "free_y") +
+  theme(legend.position = "bottom")
 ```
 
-2 spécifications équivalentes :
+# Censure et troncature
 
-$P(Cognition_i = démence|age_i) = \frac{e^{\beta_0 + \beta_1 age_{i}}}{1+e^{\beta_0 + \beta_1 age_{i}}}$
+## Censure
 
-$Logit(P(Cognition_i = démence|age_i)) = \beta_0 + \beta_1 age_{i}$
+Lorsque l'on ne connait pas la date précise de l'événement :
 
-## Odd-ratio - exercice
+- censure à droite : l'événement survient après la fin du suivi
+- censure à gauche : l'événement survient avant le début du suivi
+- censure par intervalle : l'événement survient entre deux temps de suivi
 
-A partir de l'expression suivante : $Logit(P(Y_i = 1|X_i)) = \beta_0 + \beta_1 X_{i}$
+## Censure en image
 
-Montrez que : $RC = e^{\beta_1} = \frac{P(Y_i = 1|X_i=1)/(1-P(Y_i = 1|X_i=1))}{P(Y_i = 1|X_i=0)/(1-P(Y_i = 1|X_i=0))}$
+```{r fig.height=4}
+dfcensure <- data.frame(patient = c(rep("censure à gauche", 2),
+                                    rep("censure à droite", 2),
+                                    rep("censure par intervalle", 3)),
+                        time_start = c(0, 2,
+                                       0, 8,
+                                       0, 4, 7),
+                        time_end = c(2, 10,
+                                     8, 10,
+                                     4, 7, 10),
+                        suivi = c("not observed", "observed",
+                                  "observed", "not observed",
+                                  "observed", "not observed", "observed")) %>%
+  mutate(suivi = as.factor(suivi),
+         suivi = forcats::fct_rev(suivi))
 
-PS : $log(a) - log(b) = log(a/b)$
+dfeventcensure <- data.frame(patient = c("censure à gauche",
+                                         "censure à droite", 
+                                         "censure par intervalle"),
+                             time_start = c(1, 9, 5.5))
 
-## Odd-ratio - solution
+ggplot(dfcensure,
+       mapping = aes(x = time_start,
+                     y = patient,
+                     xend = time_end,
+                     yend = patient,
+                     lty = suivi)) +
+  geom_segment() +
+  geom_point(dfeventcensure,
+             mapping = aes(x = time_start, y = patient,
+                           shape = "event"),
+             inherit.aes = FALSE,
+             size = 4) +
+  scale_shape_manual(values = 4) +
+  theme(legend.position = "bottom") +
+  labs(x = "Time", y = "", shape = "", linetype = "")
 
-A partir de $Logit(P(Y_i = 1|X_i)) = \beta_0 + \beta_1 X_{i}$ on a :
+```
 
-$Logit(P(Y_i = 1|X_i = 0)) = \beta_0 + \beta_1 \times 0 = \beta_0$
+## Troncature
 
-$Logit(P(Y_i = 1|X_i = 1)) = \beta_0 + \beta_1 \times 1 = \beta_0 + \beta_1$
+Une observation est dite tronquée si elle est conditionnelle à un autre évènement.
 
-En faisant une soustraction membre à membre on a :
+- Troncature à gauche : les patients de la base paquid sont recrutés parmi ceux les personnes ayant plus de 65 ans (troncature des patients de moins de 65 ans).
+- Troncature à droite : très rare
+- Troncature par intervalle : lorsque l'on utilise un registre, les patients ayant fait l'événement étudié par le registre avant sa mise en place ne sont pas pris en compte. Les patients répertoriés après la consultation du registre ne seront pas non plus pris en compte.
 
-$$
-\begin{aligned}
-\beta_1 & = Logit(P(Y_i|X_i = 1)) -  Logit(P(Y_i|X_i = 0)) \\
-& = log(\frac{P(Y_i|X_i = 1)}{1-P(Y_i|X_i = 1)}) - log(\frac{P(Y_i|X_i = 0)}{1-P(Y_i|X_i = 0)}) \\
-& = log(\frac{P(Y_i = 1|X_i=1)/(1-P(Y_i = 1|X_i=1))}{P(Y_i = 1|X_i=0)/(1-P(Y_i = 1|X_i=0))})
-\end{aligned}
-$$
-On a bien : $RC = e^{\beta_1} = \frac{P(Y_i = 1|X_i=1)/(1-P(Y_i = 1|X_i=1))}{P(Y_i = 1|X_i=0)/(1-P(Y_i = 1|X_i=0))}$
+Contrairement à la censure, les patients ayant eu une troncature ne sont pas renseignés dans la base de données.
 
-## Odd-ratio - interprétation des coefficients
+# Vraisemblance
 
-- $\beta_0$ : permet de calculer la probabilité chez les non-exposés égale à $e^{\beta_0}/(1+e^{\beta_0})$
-- $e^{\beta_1}$ : correspond au rapport de côte entre les exposés et les non-exposés (variable binaire) ou bien pour l'augmentation d'une unité d'une variable quantitative.
+## Vraisemblance - rappel
 
-# Spécification du modèle
+La vraisemblance correspond à la “probabilité” d’observer l’échantillon selon le modèle.
 
-## Cadre général
+$\mathcal{L} = \prod_{i=1}^n \mathcal{L}_i$
 
-On retrouve une formulation proche du modèle de régression linéaire :
+Pour les individus $i$ d'un échantillon de taille $n$
 
-$Logit(P(Y_i = 1|X_i)) = \beta_0 + \beta_1 X_{i1} + ... + \beta_p X_{ip}$
+## Vraisemblance - pas de censure
 
-## Indicatrices
+$\mathcal{L}_i = f(\tilde{T_i})$
 
-Les variables catégorielles à plusieurs modalités sont codées sous la forme d'indicatrice.
+avec $\tilde{T_i}$ le délai avant évenement de l'individu $i$ et $f$ la fonction de densité de probabilité
 
-Exemple :
+## Vraisemblance - censure à droite
 
-La survenue de cancer du poumon en fonction du statut tabagique codé _non fumeur_, _tabagisme actif_, _tabagisme passif_ sécrira :
+$\mathcal{L}_i = f(\tilde{T_i})^{\delta_i}S(\tilde{T_i})^{1-\delta_i}$
 
-\small
+avec $\tilde{T_i}$ le délai avant évenement ou censure de l'individu $i$ et $S$ la fonction de survie.
 
-$Logit(P(Cancer_i = 1|X_i)) = \beta_0 + \beta_1 TabagismeActif_{i} + \beta_2 TabagismePassif_{i}$
+## Exercice
 
-\normalsize	
+\tiny
 
-$e^{\beta_1}$ s'interprète comme le rapport de cote du cancer du poumon des fumeurs actifs par rapport aux noms fumeurs.
+On fait l'hypothèse que la survie de patients suit une loi exponentielle de paramètre $\lambda$ avec :
 
-$e^{\beta_2}$ s'interprète comme le rapport de cote du cancer du poumon des fumeurs passigs par rapport aux noms fumeurs.
+$S(t) = exp(-\lambda t)$
 
-## Modification d'effet
-
-Les modifications d'effet s'écrivent comme dans un modèle linéaire
-
-Exemple :
-
-La survenue de cancer du poumon dépend de la _consommation_ en paquet-année avec un effet différent selon le _sexe_ :
-
-\small
-
-$Logit(P(Cancer_i = 1|X_i)) = \beta_0 + \beta_1 Consommation_{i} + \beta_2 Homme_{i} + \beta_3 Consommation_i \times Homme_i$
-
-\normalsize	
-
-$e^{\beta_1}$ s'interprète comme le rapport de cote de l'augmentation de 1 paquet-année chez les femmes sur le risque de cancer du poumon.
-
-$e^{\beta_1 + \beta_3}$ s'interprète comme le rapport de cote de l'augmentation de 1 paquet-année chez les hommes sur le risque de cancer du poumon.
-
-## Facteur de confusion et choix des variables
-
-Comme pour le modèle linéaire, les variables explicatives d'un modèle sont :
-
-- L'exposition d'intérêt
-- Ses éventuels modificateurs d'effet
-- Les éventuels facteurs de confusion de la relation entre l'exposition et la maladie
-
-# Estimation du modèle et tests statistiques
-
-## Vraisemblance et maximum de vraisemblance - intuition (1)
-
-\footnotesize	
-
-On veut savoir quelle est la probabilité que le personnage de Sean Bean meurt dans un film. Pour cela on a répertorié tous les films dans lesquels il a joué et on a regardé s'il était ou non décédé.
+$f(t) = \lambda exp(-\lambda t)$
 
 ```{r}
-n_film <- 100
-df_SeanBean <- data.frame(film_id = seq(1, n_film, by = 1),
-                          death = rbinom(n = n_film, size = 1, prob = 0.3))
+dfExVraisemblance <- data.frame(patient = c(1,2,3),
+                                time = c(10, 20, 40),
+                                event = c(1, 0, 1))
 
-df_SeanBean[1:4,] %>%
-  knitr::kable(booktabs = T)
+dfExVraisemblance %>% knitr::kable(booktabs = TRUE)
 ```
 
-Première méthode, on calcul simplement cette probabilité :
 
-```{r echo = TRUE}
-sum(df_SeanBean$death == 1)/nrow(df_SeanBean)
-```
-Deuxième solution : le maximum de vraisemblance !
+Parmi ces deux propositions, quelle valeur de $\lambda$ vous paraît la plus probable ?
 
-## Vraisemblance et maximum de vraisemblance - intuition (2)
+- 0.05
+- 0.5
 
-\footnotesize	
+NB : $\mathcal{L}_i = f(\tilde{T_i})^{\delta_i}S(\tilde{T_i})^{1-\delta_i}$
 
-La vraisemblance correspond à la probabilité d'observer une réalisation particulière de l'échantillon pour une valeur des paramètre donnée.
+## Solution
 
-Ici, on considère que les données suivent une loi de Bernouilli (pile ou face) de paramètre $\pi$
+\tiny
 
-La vraisemblance pour un individu est $\pi$ s'il a fait l'évenement et $1-\pi$ s'il n'a pas fait l'événement. On peut donc la noter :
-
-$$\mathcal{L}(\pi;y_i) = \pi^{y_i}\times (1-\pi)^{1-y_i}$$
-
-La vraisemblance pour l'ensemble des individus est donc :
-
-$\mathcal{L}(\pi;y) = \mathcal{L}(\pi;y_1) \times ... \times  \mathcal{L}(\pi;y_n) = \prod^n_{i=1} \mathcal{L}(\pi;y_n) = \prod^n_{i=1} \pi^{y_i}\times (1-\pi)^{1-y_i}$
-
-## Vraisemblance et maximum de vraisemblance - intuition (3)
-
-\footnotesize	
-
-A partir de cela on peut faire un graphique montrant la vraisemblance en fonction de la valeur du paramètre $\pi$
-
-```{r fig.height=5}
-vec_pi <- seq(0.01, 0.99, by = 0.01)
-
-vraisemblance_sean_bean <- function(pi, y) pi^y*(1-pi)^(1-y)
-
-vec_log_vraisemblance <- lapply(vec_pi,
-                                FUN = function(pi) vraisemblance_sean_bean(pi = pi,
-                                                                           y = df_SeanBean$death) %>%
-                                  log() %>%
-                                  sum) %>%
-  unlist()
-
-minpoint <- c(max(vec_log_vraisemblance), vec_pi[which.max(vec_log_vraisemblance)])
-
-data.frame(log_vraisemblance = vec_log_vraisemblance,
-           pi = vec_pi) %>%
-  ggplot(mapping = aes(x = pi, y = log_vraisemblance)) +
-  geom_line() +
-  geom_point(x = minpoint[2], y = minpoint[1], color = "red") +
-  annotate(x = minpoint[2], y = minpoint[1]-300, geom = "text", label = paste0(round(minpoint, 1), collapse = " ; "), color = "red")
-
-```
-On retrouve la valeur de la première méthode.
-
-## Vraisemblance d'un modèle logistique - exemple démence
-
-Même principe pour une régression logistique :
-
-$\mathcal{L}(\pi;y) = \prod^n_{i=1} \pi^{y_i}\times (1-\pi)^{1-y_i}$ avec $\pi_i = \frac{e^{\beta_0 + \beta_1 age_i}}{1+e^{\beta_0 + \beta_1 age_i}}$
-
-```{r fig.height=5}
-# data
-n <- 1000
-dfintuition <- data.frame(age_10 = runif(n = n, min = 40, max = 100)/10) %>%
-  mutate(demence_proba = expit(-5 + age_10/2),
-         demence = rbinom(prob = demence_proba, size = 1, n = nrow(.)))
-
-## log vraisemblance
-log_vraisemblance_log <- function(beta_0, beta_1, y, x){
-  pred_linear <- beta_0 + beta_1*x
-  res <- y*pred_linear - log(1+exp(pred_linear))
-  return(res)
-}
-
-## parameters
-vec_beta_0 <- seq(-10, 10, by = 1)
-vec_beta_1 <- seq(-1, 1, by = 0.1)
-
-dfBeta <- expand.grid(beta_0 = vec_beta_0, beta_1 = vec_beta_1)
-
-vec_log_vraisemblance <- apply(dfBeta, MARGIN = 1, FUN = function(row){
-  log_vraisemblance_log(beta_0 = row[["beta_0"]],
-                        beta_1 = row[["beta_1"]],
-                        y = dfintuition$demence,
-                        x = dfintuition$age_10) %>%
-    sum()
+```{r fig.height=4, echo = TRUE}
+lambda = seq(0.001, 0.6, by = 0.003)
+vec_vraisemblance <- sapply(lambda, function(lambda_j){
+  f_ti <- lambda_j * exp(- lambda_j * dfExVraisemblance$time)
+  s_ti <- exp(- lambda_j * dfExVraisemblance$time)
+  vraisemblance <- prod(f_ti^dfExVraisemblance$event*s_ti^(1-dfExVraisemblance$event))
 })
+plot(lambda, vec_vraisemblance, ylab = "Vraisemblance", type = 'l')
+```
 
-dfplotLogistiqueRegression <- dfBeta %>%
-  mutate(log_vraisemblance = vec_log_vraisemblance,
-         max_log_vraisemblance = log_vraisemblance == max(vec_log_vraisemblance))
+Réponse : 0.05
 
-ggplot(dfplotLogistiqueRegression, aes(x=beta_0, y= beta_1, z= log_vraisemblance, color = max_log_vraisemblance)) + 
-  axes_3D() +
-  stat_3D() +
-  gg3D::axis_labs_3D() +
-  theme(legend.position = "bottom")
+## Vraisemblance - censure à droite et troncature à gauche
+
+$\mathcal{L}_i = \frac{f(\tilde{T_i})^{\delta_i}S(\tilde{T_i})^{1-\delta_i}}{S(T_{0i})}$
+
+avec $\tilde{T_i}$ le délai avant évenement ou censure de l'individu $i$ et $T_{0i}$ le délai avant troncature.
+
+Dans la suite du cours, on ne s'intéressera qu'au cas avec censure à droite et troncature à gauche.
+
+# Kaplan Meier
+
+## Définition
+
+\tiny
+
+- $n_j$ : nombre de sujets subissant l'événement au temps $t_j$
+- $d_j$ : nombre de sujets à risque au temps $t_j$
+- $\widehat{S}(t) = \prod_{j:t_j<t} \frac{n_j - d_j}{n_j}$
+- D'où : $\widehat{S}(t_{j+1}) = \widehat{S}(t_{j}) \times \frac{n_{j+1} - d_{j+1}}{n_{j+1}}$
+
+## En pratique (1)
+
+\tiny
+
+```{r fig.height=3, echo=FALSE}
+dfKm <- data.frame(subject = c(1, 2, 3, 4, 5),
+                   time = c(10, 15, 20, 22, 30),
+                   event = c(1, 0, 1, 0, 0))
+
+dfKm %>% knitr::kable(booktabs = TRUE)
+```
+
+## En pratique (2)
+
+\tiny
+
+```{r}
+dfKm %>% knitr::kable(booktabs = TRUE)
+```
+
+```{r}
+dfKmAnalysedStep1 <- data.frame(time = c(0, 10, 15, 20, 22, 30),
+                                n_j = c(5, 5, 4, 3, 2, 1),
+                                d_j = c(0, 1, 0, 1, 0, 0))
+dfKmAnalysedStep1 %>% knitr::kable(booktabs = TRUE)
+```
+
+## En pratique (3)
+
+\tiny
+
+```{r echo=TRUE}
+dfKmAnalysedStep2 <- dfKmAnalysedStep1 %>%
+  mutate(Prob_cond = (n_j - d_j)/n_j,
+         survival = cumprod(Prob_cond))
+dfKmAnalysedStep2 %>% knitr::kable(booktabs = TRUE)
+```
+
+## En pratique (4)
+
+\tiny
+
+```{r fig.height=3, echo=FALSE}
+dfKmAnalysedStep2 %>% knitr::kable(booktabs = TRUE)
+
+ggplot(dfKmAnalysedStep2, mapping = aes(x = time, y = survival)) +
+  geom_step() +
+  lims(y = c(0, 1))
+
+```
+
+## Exercice
+
+\tiny
+
+Construisez l'estimateur de KM :
+
+```{r}
+dfKmExo <- data.frame(subject = c(1, 2, 3, 4, 5),
+                      time = c(2, 8, 10, 14, 16),
+                      event = c(0, 1, 1, 0, 1))
+
+dfKmExoCalc <- data.frame(time = c(0, 8, 10, 16),
+                          n_j = c(5, 4, 3, 1),
+                          d_j = c(0, 1, 1, 1)) %>%
+  mutate(Prob_cond = (n_j - d_j)/n_j,
+         survival = cumprod(Prob_cond))
+
+pKmExo <- ggplot(dfKmExoCalc, mapping = aes(x = time, y = survival)) +
+  geom_step() +
+  lims(y = c(0, 1))
+
+knitr::kable(dfKmExo, booktabs = TRUE)
+```
+
+## Solution
+
+\tiny
+
+```{r}
+knitr::kable(dfKmExo, booktabs = TRUE)
+
+knitr::kable(dfKmExoCalc, booktabs = TRUE)
+
 ```
 
 ## Intervalles de confiance
 
-Les paramètres $\widehat\beta$ suivent une loi normale de variance $\widehat{var}(\widehat\beta_j)$ tel que l'intervalle de confiance au risque $\alpha$ est défini tel que :
+Formule de Greenwood
 
-$[\widehat \beta_j \pm z_{\alpha/2} \sqrt{\widehat{var}(\widehat\beta_j)}]$
+Formule de Rothman (++)
 
-## Tests statistiques
+# Log-rank
 
-- Test global : Rapport de vraisemblance (+++), Wald, Score
-- Apport d'une variable : Wald (+++), Rapport de vraisemblance, Score
-- Apport d'un ensemble de variables : Rapport de vraisemblance (+++), Wald, Score
 
-## Tests statistiques - Wald (un seul paramètre)
-
-Soit $\widehat\beta_1$ l'estmateur du coefficient $\beta_1$ par le modèle et $SE_{\widehat\beta_1}$ sont erreur standard associée alors la statistique de test de wald est définie comme :
-
-$Wald = \frac{\widehat\beta_1}{SE_{\widehat\beta_1}}$
-
-et suit une loi du Chi-2 à 1 ddl.
-
-## Tests statistiques - Log-vraisemblance (comparaison de modèle)
-
-Soit $m2$ le modèle complet et $m1$ le modèle restreint, le rapport de vraisemblance est défini comme :
-
-$RV = 2\times (loglik(m2)-loglik(m1))$
-
-Dans ce cas $RV$ suit une loi du Ch-2 avec un ddl égal à la différence du nombre de paramètres ($\beta$) entre les deux modèles.
-
-## Tests statistiques - Score (un seul paramètre)
-
-Soit $\beta$ le paramètre de la régression logisitique à tester. Soit $U(\beta)$ la dérivée première de la vraisemblance du modèle selon ce paramètre et $I(\beta)$ l'opposée de l'espérance de la dérivée seconde de la vraisemblance de ce paramètre. Alors la statistique du score est définie telle que :
-
-$Score = \frac{U(\beta)^2}{I(\beta)}$
-
-et suit une loi du Chi-2 à 1 ddl
-
-# Hypothèses
-
-## Hypothèses du modèle
-
-- Log-linéarité : comme pour le modèle de régression linéaire, il faut vérifier la log-linéarité des $\beta$ pour les variables quantitatives.
-- Indépendance des individus
-
-## Calibration - test Hosmer et Lemeshow
-
-\tiny
-
-Compare la probabilité prédite et la proportion de réussite de l'outcome.
-
-```{r echo = TRUE}
-vec_proba <- runif(n = 1000, min = 0, max = 1)
-vec_res <- rbinom(n = 1000, size = 1, prob = vec_proba)
-hoslem <- generalhoslem::logitgof(vec_res, vec_proba)
-hoslem
-```
-
-```{r fig.height=3}
-cbind(hoslem$expected, hoslem$observed) %>%
-  as.data.frame() %>%
-  tibble::rownames_to_column(var = "group") %>%
-  mutate(prop_theo = yhat1/(yhat0 + yhat1),
-         prop_obs = y1/(y0 + y1)) %>%
-  ggplot(mapping = aes(x = prop_theo, y = prop_obs, label = group)) +
-  geom_point() +
-  geom_text(nudge_y = +0.1) +
-  geom_function(fun = function(x) x, color = "red") +
-  labs(x = "Proportion théorique", y = "Proportion estimée par la régression")
-```
-
-## Performance - AUC
-
-```{r fig.height=4}
-roc_curve <- PRROC::roc.curve(scores.class0 = vec_proba, weights.class0 = vec_res, curve = TRUE)
-plot(roc_curve)
-```
-
-$Se = \frac{VP}{VP+FN}$
-
-$FPR = 1 - Sp = 1- \frac{VN}{VN+FP}$
-
-## Performance - AUPRC
-
-```{r fig.height=4}
-pr_curve <- PRROC::pr.curve(scores.class0 = vec_proba, weights.class0 = vec_res, curve = TRUE)
-plot(pr_curve)
-```
-
-$Recall = Se = \frac{VP}{VP+FN}$
-
-$Precision = VPP = \frac{VP}{VP+FP}$
-
-# Exemple
-
-## Données
-
-On s'intéresse au lien entre l'IMC et le décès. Pour cela, on a recueilli des informations sur l'âge des patients (en dizaine d'années) et sur leur IMC et on a recueilli leur statut vital à 6 mois.
-
-```{r}
-n = 10^4
-df_reg_log <- data.frame(age_10 = runif(n = n, min = 2, max = 10),
-                         IMC = runif(n = n, min = 13, max = 40)) %>%
-  mutate(proba_deces = expit(-5 + age_10/4 + 0.2*(IMC/10)^2),
-         deces = rbinom(n = n, size = 1, prob = proba_deces))
-
-df_reg_log %>%
-  select(-proba_deces) %>%
-  head() %>%
-  knitr::kable(booktabs = TRUE)
-```
-
-
-## Spécification du modèle - exercice
-
-On s'intéresse au lien entre l'IMC et le décès. Pour cela, on a recueilli des informations sur l'âge des patients et sur leur IMC et on a recueilli leur statut vital à 6 mois.
-
-Ecrivez le modèle correspondant
-
-## Spécification du modèle - solution
-
-$Logit(P(Décès_i = 1|IMC_i, Age_i)) = \beta_0 + \beta_1 Age_i + \beta_2 IMC_i$
-
-## Fit du modèle
-
-\tiny
-
-```{r echo = TRUE}
-fit <- glm(deces ~ age_10 + IMC, family = "binomial", data = df_reg_log)
-summary(fit)
-```
-
-## Hypothèses à vérifier - linéarité
-
-\tiny
-
-```{r echo = TRUE}
-library(mfp)
-fp_reg_log <- mfp::mfp(formula = deces ~ fp(age_10) + fp(IMC), family = "binomial", data = df_reg_log)
-
-glm_reg_log <- glm(fp_reg_log$formula, family = "binomial", data = df_reg_log)
-
-summary(glm_reg_log)
-```
-
-## Calibration
-
-\tiny
-
-```{r fig.height=2, echo = TRUE}
-hoslem_test <- generalhoslem::logitgof(df_reg_log$deces, fitted(fp_reg_log))
-
-cbind(hoslem_test$expected, hoslem_test$observed) %>%
-  as.data.frame() %>%
-  tibble::rownames_to_column(var = "group") %>%
-  mutate(prop_theo = yhat1/(yhat0 + yhat1),
-         prop_obs = y1/(y0 + y1)) %>%
-  ggplot(mapping = aes(x = prop_theo, y = prop_obs, label = group)) +
-  geom_point() +
-  geom_text(nudge_y = +0.1) +
-  geom_function(fun = function(x) x, color = "red") +
-  annotate(label = paste0("p-val HL test : ", round(hoslem_test$p.value, 3)),
-           x = 0.5, y = 1, geom = "text") +
-  labs(x = "Proportion théorique", y = "Proportion estimée") +
-  lims(x= c(0,1), y=c(0,1))
-
-```
-
-## Performances ROC curve
-
-\tiny
-
-```{r echo = TRUE, fig.height=4}
-roc_curve <- PRROC::roc.curve(scores.class0 = fitted(fp_reg_log),
-                              weights.class0 = df_reg_log$deces, curve = TRUE)
-
-plot(roc_curve, color = FALSE)
-```
-
-## Performances PR curve
-
-\tiny
-
-```{r echo = TRUE, fig.height=4}
-
-pr_curve <- PRROC::pr.curve(scores.class0 = fitted(fp_reg_log),
-                            weights.class0 = df_reg_log$deces, curve = TRUE)
-
-plot(pr_curve, color = FALSE)
-
-```
-
-## Interprétation du modèle
-
-\tiny
-
-```{r}
-broom::tidy(glm_reg_log, conf.int = TRUE) %>%
-  knitr::kable(digits = 3, booktabs = TRUE)
-```
-
-## Prédiction
-
-On peut se poser la question de la probabilité prédite par le modèle de faire un événement pour un individu de 28 ans avec un IMC à 18
-
-```{r echo = TRUE}
-df_new <- data.frame(IMC = 18,
-                     age_10 = 2.8)
-predict(glm_reg_log, df_new, type = "response")
-```
 
 ## Fin
 
