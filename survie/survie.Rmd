@@ -403,8 +403,8 @@ Dans la suite du cours, on ne s'intéressera qu'au cas avec censure à droite et
 
 \tiny
 
-- $n_j$ : nombre de sujets subissant l'événement au temps $t_j$
-- $d_j$ : nombre de sujets à risque au temps $t_j$
+- $d_j$ : nombre de sujets subissant l'événement au temps $t_j$
+- $n_j$ : nombre de sujets à risque au temps $t_j$
 - $\widehat{S}(t) = \prod_{j:t_j<t} \frac{n_j - d_j}{n_j}$
 - D'où : $\widehat{S}(t_{j+1}) = \widehat{S}(t_{j}) \times \frac{n_{j+1} - d_{j+1}}{n_{j+1}}$
 
@@ -502,7 +502,207 @@ Formule de Rothman (++)
 
 # Log-rank
 
+## Intuition
 
+\small
+
+Objectif : comparer deux (ou plus) courbes de survie
+
+Sous H0 (pas de différence), le nombre attendu d'événement à un instant $j$ dans chacun des groupes est similaire au nombre d'événement dans l'échantillon pondéré par le nombre d'individu dans chaque groupe.
+
+On va comparer ce nombre attendu au nombre observé. Si la différence est trop grande alors on conclut à une différence significative.
+
+Suit une loi du Chi-2 à $g-1$ où $g$ est le nombre de groupe (e.g $ddl = 1$ si 2 groupes)
+
+## En pratique (1)
+
+```{r}
+dfLogRankdata <- data.frame(patient = 1:10,
+                            sexe = c("M", "M", "M", "F", "M", "M", "F", "F", "F", "F"),
+                            time = c(4, 6, 8, 11, 15, 15, 20, 20, 25, 31),
+                            died = c(1, 1, 0, 1, 1, 1, 1, 0, 1, 0))
+
+modelKmLogrank <- survfit(Surv(time = time, event = died) ~ sexe, data = dfLogRankdata)
+
+plotKmLogRank <- ggsurvplot(modelKmLogrank)
+
+dfLogRank <- data.frame(time = c(4, 6, 11, 15, 20, 25),
+                        Male_at_risk = c(5, 4, 2, 2, 0, 0),
+                        Female_at_risk = c(5, 5, 5, 4, 4, 2),
+                        Male_deaths = c(1, 1, 0, 2, 0, 0),
+                        Female_deaths = c(0, 0, 1, 0, 1, 1)) %>%
+  mutate(Deaths = Male_deaths + Female_deaths,
+         Exp_deaths_male = Deaths*(Male_at_risk/(Female_at_risk + Male_at_risk)),
+         Exp_deaths_female = Deaths*(Female_at_risk/(Female_at_risk + Male_at_risk)))
+
+stat_male <- (sum(dfLogRank$Male_deaths) - sum(dfLogRank$Exp_deaths_male))^2/sum(dfLogRank$Exp_deaths_male)
+stat_female <- (sum(dfLogRank$Female_deaths) - sum(dfLogRank$Exp_deaths_female))^2/sum(dfLogRank$Exp_deaths_female)
+
+stat_total <- stat_female + stat_male
+```
+
+::: columns
+
+:::: column
+```{r}
+dfLogRankdata %>% knitr::kable(booktabs = TRUE)
+```
+::::
+
+:::: column
+```{r fig.height=5}
+plotKmLogRank
+```
+::::
+
+:::
+
+## En pratique (2)
+
+\tiny
+
+```{r}
+dfLogRank %>% select(-Exp_deaths_female, -Exp_deaths_male) %>% knitr::kable(booktabs = TRUE)
+```
+
+## En pratique (3)
+
+\tiny
+
+$$Expected\_death\_male = Deaths \times \frac{Male\_at\_risk}{Male\_at\_risk + Female\_at\_risk}$$
+
+```{r}
+dfLogRank %>% knitr::kable(booktabs = TRUE)
+```
+
+## En pratique (4)
+
+\tiny
+
+```{r}
+dfLogRank %>% knitr::kable(booktabs = TRUE)
+```
+
+
+$$\mathcal{X}^2 = \sum_{group} \Big(\frac{(\sum observed - \sum expected)^2}{\sum expected} \Big)$$
+
+$$
+\begin{aligned}
+\mathcal{X}^2 &= \sum_{group} \Big(\frac{(\sum observed - \sum expected)^2}{\sum expected} \Big) \\
+  &= \frac{(4-1.897)^2}{1.897} + \frac{(3-5.103)^2}{5.103} \\
+  &= 3.199
+\end{aligned}
+$$
+
+# Cox
+
+## Un modèle de régression
+
+Modèle à risque proportionnel
+
+$\alpha(t, Z) = \alpha_0(t) exp(\beta_1 X_{i1} + \beta_2 X_{i2} + ... + \beta_p X_{ip})$
+
+A noter l'absence de $\beta_0$ "remplacé" par $\alpha_0(t)$
+
+## Exercice
+
+$\alpha(t, Z) = \alpha_0(t) exp(\beta_1 X_{i1} + \beta_2 X_{i2} + ... + \beta_p X_{ip}$
+
+Soit un modèle univarié évaluant le risque de décès en fonction du bras de traitement (0: placebo, 1: traitement).
+
+Ecrivez le risque instantané de faire l'événement chez un patient prenant un placebo, idem chez un patient prenant le traitement.
+
+Déduisez en le risque relatif instantané de décéder chez les patient prenant le traitement par rapport à ceux prenant le placebo.
+
+## Solution
+
+Modèle : $\alpha(t, Z) = \alpha_0(t) exp(\beta_1 Traitement_{i1})$
+
+Patient $j$ dans le groupe placebo : $\alpha(t, Z_j) = \alpha_0(t) exp(0) = \alpha_0(t)$
+
+Patient $k$ dans le groupe traitement : $\alpha(t, Z_k) = \alpha_0(t) exp(\beta_1)$
+
+Rapport de risque : $HR = RR = \frac{\alpha_0(t) exp(\beta_1)}{\alpha_0(t)} = e^{\beta_1}$
+
+## Spécification du modèle
+
+- Choix des variables : idem régression linéaire et logistique
+
+- Variables catégorielles : idem régression linéaire et logistique
+
+- Modification d'effet : idem régression linéaire et logistique
+
+## Vraisemblance partielle
+
+\tiny
+
+Soit $t_1, ..., t_k$ les temps d'événements (décès) en considérant qu'il n'y a qu'un seul événement à chaque temps.
+
+Chaque individu $i$ a un risque instantané de faire l'événement qui dépend du temps et de ses covariables $\alpha_i(t_i, Z_i)$.
+
+On peut écrire la vraisemblance telle que :
+
+$$
+\begin{aligned}
+  L_i(\beta) &= P(\text{individu j fait l'évenement}|\text{un des individus a fait l'événement}) \\
+  &=  \frac{P(\text{individu j fait l'évenement}|\text{à risque à l'instant } t_j)}{\sum P(\text{individus fassent l'événement}|\text{à risque à l'instant } t_j)}\\
+  &= \frac{\alpha_0(t_j)exp(\beta_1 X_j)}{\sum \alpha_0(t_j)exp(\beta_1 X_l)} \\
+  &= \frac{\alpha_0(t_j)exp(\beta_1 X_j)}{\alpha_0(t_j) \sum exp(\beta_1 X_l)} \\
+  &= \frac{exp(\beta_1 X_j)}{\sum exp(\beta_1 X_l)}
+\end{aligned}
+$$
+
+Donc pas besoin d'estimer $\alpha_0(t)$ !!!
+
+## Intervalle de confiance
+
+$IC : exp([\widehat \beta_j \pm z_{\alpha/2} \sqrt{\widehat{var}(\widehat\beta_j)}])$
+
+## Tests statistiques
+
+- Test global : Rapport de vraisemblance (+++), Wald, Score
+- Apport d'une variable : Wald (+++), Rapport de vraisemblance, Score
+- Apport d'un ensemble de variables : Rapport de vraisemblance (+++), Wald, Score
+
+## Tests statistiques - Wald (un seul paramètre)
+
+Soit $\widehat\beta_1$ l'estmateur du coefficient $\beta_1$ par le modèle et $SE_{\widehat\beta_1}$ sont erreur standard associée alors la statistique de test de wald est définie comme :
+
+$Wald = \frac{\widehat\beta_1}{SE_{\widehat\beta_1}}$
+
+et suit une loi du Chi-2 à 1 ddl.
+
+## Tests statistiques - Log-vraisemblance (comparaison de modèle)
+
+Soit $m2$ le modèle complet et $m1$ le modèle restreint, le rapport de vraisemblance est défini comme :
+
+$RV = 2\times (loglik(m2)-loglik(m1))$
+
+Dans ce cas $RV$ suit une loi du Ch-2 avec un ddl égal à la différence du nombre de paramètres ($\beta$) entre les deux modèles.
+
+## Tests statistiques - Score (un seul paramètre)
+
+Soit $\beta$ le paramètre du modèle de cox à tester. Soit $U(\beta)$ la dérivée première de la vraisemblance du modèle selon ce paramètre et $I(\beta)$ l'opposée de l'espérance de la dérivée seconde de la vraisemblance de ce paramètre. Alors la statistique du score est définie telle que :
+
+$Score = \frac{U(\beta)^2}{I(\beta)}$
+
+et suit une loi du Chi-2 à 1 ddl
+
+## Hypothèses du modèle
+
+<!-- - Proportional Hazards assumption : test résidus de Schoenfeld -->
+
+<!-- - Linéarity : polynômes fractionnaires -->
+
+<!-- ## Résidus de Schoenfeld -->
+
+<!-- ## Polynômes fractionnaires -->
+
+<!-- Test plusieurs transformations des variables quantitatives. -->
+
+<!-- Cf package `mfp` -->
+
+## Introduire le temps dans un modèle de survie
 
 ## Fin
 
