@@ -19,6 +19,8 @@ library(ggplot2)
 library(gg3D)
 library(survival)
 library(survminer)
+library(dagitty)
+library(ggdag)
 ```
 
 # Rappels
@@ -688,21 +690,154 @@ $Score = \frac{U(\beta)^2}{I(\beta)}$
 
 et suit une loi du Chi-2 à 1 ddl
 
+## Variables explicatives dépendantes du temps
+
+Introduction dans le modèle de variables dépendantes du temps
+
+$\alpha(t) = \alpha_0(t) exp(\beta_1 X(t))$
+
+L'effet de la variable reste le même mais celle-ci change au cours du temps.
+
+Trop cool ... mais difficile à utiliser en épidémio
+
+## Variables explicatives dépendantes du temps - challenge (1)
+
+Prenons un traitement anti-rétroviral (VIH) qui change au cours du temps $A(t) = \{0,1\}$ dont l'indication dépend du nombre de CD4 à l'instant $t$ noté $CD4(t)$. On s'intéresse au risque de survenue d'une infection opportuniste $O$. On peut représenter le problème sous la forme suivante :
+
+
+```{r fig.height= 4}
+coords <- list(
+  x = c(A0t = 0, A1t = 1, CD40t = 0, CD41t = 1, O = 2),
+  y = c(A0t = 0, A1t = 0, CD40t = 1, CD41t = 1, O = 0.5)
+)
+
+dagified <- dagify(A0t ~ CD40t,
+                   A1t ~ A0t + CD41t,
+                   CD41t ~ CD40t + A0t,
+                   O ~ CD40t + CD41t + A1t + A0t,
+                   coords = coords,
+                   labels = c("A0t" = "A(0)", 
+                              "A1t" = "A(1)",
+                              "CD40t" = "CD4(0)",
+                              "CD41t" = "CD4(1)",
+                              "O" = "Infection"),
+                   exposure = "A1t",
+                   outcome = "O")
+ggdag(dagified, text = TRUE) +
+  theme_dag()
+```
+
+
+## Variables explicatives dépendantes du temps - challenge (2)
+
+```{r fig.height= 4}
+coords <- list(
+  x = c(A0t = 0, A1t = 1, CD40t = 0, CD41t = 1, O = 2),
+  y = c(A0t = 0, A1t = 0, CD40t = 1, CD41t = 1, O = 0.5)
+)
+
+dagified <- dagify(A1t ~ A0t + CD41t,
+                   CD41t ~ A0t,
+                   O ~ CD41t + A1t,
+                   coords = coords,
+                   labels = c("A0t" = "A(0)", 
+                              "A1t" = "A(1)",
+                              "CD40t" = "CD4(0)",
+                              "CD41t" = "CD4(1)",
+                              "O" = "Infection"),
+                   exposure = "A1t",
+                   outcome = "O")
+ggdag(dagified, text = TRUE) +
+  theme_dag()
+```
+
+$CD4(1)$ est à la fois :
+
+- Un facteur de confusion entre $A(1)$ et $O$
+- Un médiateur d'effet entre $A(0)$ et $O$
+
+On ne peut donc ni ajuster sur cette variable, ni ne pas ajuster dessus.
+
+## Variables explicatives dépendantes du temps - challenge (3)
+
+Les variables explicatives dépendantes du temps sont réservées à des variables **exogènes** (i.e une variable dont la valeur ne peut être influencée par a survenue de l'événement ou par un facteur modifiant le risque de survenue) par exemple :
+
+- Météo
+- Pollution
+- Politiques publiques
+
+Pour des variables dites **endogènes** il faudra se tourner vers d'autres modèles (e.g marginal structural model)
+
 ## Hypothèses du modèle
 
-<!-- - Proportional Hazards assumption : test résidus de Schoenfeld -->
+- Log-linéarité : polynômes fractionnaires
 
-<!-- - Linéarity : polynômes fractionnaires -->
+- Proportional Hazards assumption : test résidus de Schoenfeld
 
-<!-- ## Résidus de Schoenfeld -->
+## Log-linéarité
 
-<!-- ## Polynômes fractionnaires -->
+- Variable continue en catégorielle et comparaison avec la variable en continu
 
-<!-- Test plusieurs transformations des variables quantitatives. -->
+- Polynômes fractionnaires (package mfp)
 
-<!-- Cf package `mfp` -->
+$S = \{-2, -1, -0.5, 0, 0.5, 1, 2, 3\}$ avec $0$ défini comme $ln(x)$
 
-## Introduire le temps dans un modèle de survie
+Polynôme degré 1 : $X^p$ avec $p$ choisi dans $S$
+
+Polynôme degré 2 : $X^{p1} + X^{p2}$ avec $p1$ et $p2$ choisi dans $S$
+
+## Proportional Hazards assumption : test résidus de Schoenfeld
+
+\small
+
+Un test par variable explicative du modèle.
+
+Pour chaque variable $p$ et pour chaque sujet $i$ décédé ou perdu de vue au temps $T_i$, on va comparer la valeur observée de la variable $X_i$ à la valeur attendue de cette variable par le modèle de Cox $\widehat{X_i}$ pour un individu décédé ou perdu de vue à $T_i$.
+
+$Schoenfeld = X_i - \widehat{X_i}$
+
+Il faut vérifier (gaphiquement ou via un test statistique) l'absence de corrélation entre le temps et les résidus.
+
+## Que faire quand l'hypothèse n'est pas vérifiée ?
+
+- Interaction avec le temps
+- Stratification
+- Rien
+
+## Interaction avec le temps
+
+\small
+
+- Interaction avec le temps en continu
+
+$\alpha(t) = \alpha_0(t) exp(\beta_1 X_i + \beta_2 X_i\times t)$
+
+- Interaction avec le temps en classe
+
+**expemple**: On crée une indicatrice $Z_{1i}$ qui vaut $1$ si $t<30$ et $0$ sinon
+
+
+$\alpha(t) = \alpha_0(t) exp(\beta_1 X_i * Z_{1i} + \beta_2 X_i * (1-Z_{1i}))$
+
+Dans ce cas $\beta_1$ représente l'effet de la variable avant $30$ et $\beta_2$ après $30$
+
+## Stratification (exemple sur le centre)
+
+On évalue l'effet d'un traitement $A$ en tenant compte de l'effet centre $C$ (2 centres) :
+
+$\alpha(t) = \alpha_0(t) exp(\beta_1 A + \beta_2 C)$
+
+Une alternative est de stratifier le modèle de Cox sur le centre :
+
+$\alpha(t) = \alpha_{0C}(t) exp(\beta_1 A)$
+
+L'effet centre est pris en compte et il peut varier au cours du temps. Par contre on n'estime plus l'effet du centre dans le modèle.
+
+## Ne rien faire
+
+On peut choisir de simplifier le modèle en négligeant cette interaction avec le temps.
+
+Attention à ne pas faire ça si on a un changement qualitatif de la relation (e.g effet protecteur puis délétère)
 
 ## Fin
 

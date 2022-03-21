@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2022.2.26)  18 MAR 2022 12:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021) (preloaded format=pdflatex 2022.2.26)  21 MAR 2022 09:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -856,16 +856,36 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             See the microtype manual for details.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-(./survie.nav) [1{/home/thomas/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+(./survie.nav)
+Overfull \hbox (20.21312pt too wide) detected at line 159
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [2
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[1{/home/thomas/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-<survie_files/figure-beamer/simustartsimple-1.pdf, id=327, 722.7pt x 361.35pt>
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[2
+
+]
+<survie_files/figure-beamer/simustartsimple-1.pdf, id=363, 722.7pt x 361.35pt>
 File: survie_files/figure-beamer/simustartsimple-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/simustartsimple-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/simustartsimple-1.pdf  used on input line 168.
 (pdftex.def)             Requested size: 307.2923pt x 153.64615pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [3
 
  <./survie_files/figure-beamer/simustartsimple-1.pdf>]
@@ -913,53 +933,113 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
 (Font)              Font shape `T1/lmss/m/sl' tried instead on input line 175.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
 (Font)              Font shape `T1/lmss/m/sl' tried instead on input line 175.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [4
 
 ]
-<survie_files/figure-beamer/simustartsimplereglog-1.pdf, id=488, 722.7pt x 361.35pt>
+<survie_files/figure-beamer/simustartsimplereglog-1.pdf, id=542, 722.7pt x 361.35pt>
 File: survie_files/figure-beamer/simustartsimplereglog-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/simustartsimplereglog-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/simustartsimplereglog-1.pdf  used on input line 180.
 (pdftex.def)             Requested size: 307.2923pt x 153.64615pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [5
 
- <./survie_files/figure-beamer/simustartsimplereglog-1.pdf>] [6
+ <./survie_files/figure-beamer/simustartsimplereglog-1.pdf>]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [7
+[6
 
 ]
-<survie_files/figure-beamer/unnamed-chunk-1-1.pdf, id=719, 722.7pt x 289.08pt>
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[7
+
+]
+<survie_files/figure-beamer/unnamed-chunk-1-1.pdf, id=801, 722.7pt x 289.08pt>
 File: survie_files/figure-beamer/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/unnamed-chunk-1-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-1-1.pdf  used on input line 198.
 (pdftex.def)             Requested size: 307.2923pt x 122.91692pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [8
 
  <./survie_files/figure-beamer/unnamed-chunk-1-1.pdf>]
-<survie_files/figure-beamer/unnamed-chunk-2-1.pdf, id=800, 722.7pt x 289.08pt>
+<survie_files/figure-beamer/unnamed-chunk-2-1.pdf, id=890, 722.7pt x 289.08pt>
 File: survie_files/figure-beamer/unnamed-chunk-2-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/unnamed-chunk-2-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-2-1.pdf  used on input line 203.
 (pdftex.def)             Requested size: 307.2923pt x 122.91692pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [9
 
  <./survie_files/figure-beamer/unnamed-chunk-2-1.pdf>]
-<survie_files/figure-beamer/unnamed-chunk-3-1.pdf, id=881, 722.7pt x 361.35pt>
+<survie_files/figure-beamer/unnamed-chunk-3-1.pdf, id=980, 722.7pt x 361.35pt>
 File: survie_files/figure-beamer/unnamed-chunk-3-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/unnamed-chunk-3-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-3-1.pdf  used on input line 213.
 (pdftex.def)             Requested size: 307.2923pt x 153.64615pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [10
 
- <./survie_files/figure-beamer/unnamed-chunk-3-1.pdf>] [11
+ <./survie_files/figure-beamer/unnamed-chunk-3-1.pdf>]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [12
+[11
 
-] [13
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [14
+[12
 
-] [15
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[13
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[14
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[15
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -979,47 +1059,122 @@ Overfull \hbox (4.15727pt too wide) detected at line 288
 Overfull \vbox (0.14159pt too high) detected at line 288
  []
 
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [16
 
-] [17
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [18
-
-] [19
-
-] [20
+[17
 
 ]
-<survie_files/figure-beamer/unnamed-chunk-4-1.pdf, id=1720, 722.7pt x 289.08pt>
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[18
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[19
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[20
+
+]
+<survie_files/figure-beamer/unnamed-chunk-4-1.pdf, id=1919, 722.7pt x 289.08pt>
 File: survie_files/figure-beamer/unnamed-chunk-4-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/unnamed-chunk-4-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-4-1.pdf  used on input line 364.
 (pdftex.def)             Requested size: 307.2923pt x 122.91692pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [21
 
- <./survie_files/figure-beamer/unnamed-chunk-4-1.pdf>] [22
+ <./survie_files/figure-beamer/unnamed-chunk-4-1.pdf>]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [23
+[22
 
 ]
-<survie_files/figure-beamer/unnamed-chunk-5-1.pdf, id=1951, 722.7pt x 289.08pt>
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[23
+
+]
+<survie_files/figure-beamer/unnamed-chunk-5-1.pdf, id=2178, 722.7pt x 289.08pt>
 File: survie_files/figure-beamer/unnamed-chunk-5-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/unnamed-chunk-5-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-5-1.pdf  used on input line 388.
 (pdftex.def)             Requested size: 307.2923pt x 122.91692pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [24
 
- <./survie_files/figure-beamer/unnamed-chunk-5-1.pdf>] [25
+ <./survie_files/figure-beamer/unnamed-chunk-5-1.pdf>]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [26
+[25
 
-] [27
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [28
+[26
 
-] [29
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [30
+[27
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[28
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[29
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[30
 
 ]
 \openout4 = `survie.vrb'.
@@ -1035,43 +1190,103 @@ LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 1
 (/home/thomas/.TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<survie_files/figure-beamer/unnamed-chunk-7-1.pdf, id=2484, 722.7pt x 289.08pt>
+<survie_files/figure-beamer/unnamed-chunk-7-1.pdf, id=2775, 722.7pt x 289.08pt>
 File: survie_files/figure-beamer/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/unnamed-chunk-7-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-7-1.pdf  used on input line 17.
 (pdftex.def)             Requested size: 307.2923pt x 122.91692pt.
-) [31
+)
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
- <./survie_files/figure-beamer/unnamed-chunk-7-1.pdf>] [32
+[31
 
-] [33
+ <./survie_files/figure-beamer/unnamed-chunk-7-1.pdf>]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [34
+[32
 
-] [35
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [36
+[33
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[34
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[35
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[36
 
 ]
 \openout4 = `survie.vrb'.
 
-(./survie.vrb) [37
+(./survie.vrb)
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[37
 
 ]
-<survie_files/figure-beamer/unnamed-chunk-12-1.pdf, id=3018, 722.7pt x 216.81pt>
+<survie_files/figure-beamer/unnamed-chunk-12-1.pdf, id=3373, 722.7pt x 216.81pt>
 File: survie_files/figure-beamer/unnamed-chunk-12-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/unnamed-chunk-12-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-12-1.pdf  used on input line 630.
 (pdftex.def)             Requested size: 307.2923pt x 92.18768pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [38
 
- <./survie_files/figure-beamer/unnamed-chunk-12-1.pdf>] [39
+ <./survie_files/figure-beamer/unnamed-chunk-12-1.pdf>]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [40
+[39
 
-] [41
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [42
+[40
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[41
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[42
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -1082,17 +1297,32 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
 (Font)              Font shape `T1/lmss/m/sl' tried instead on input line 707.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <7> not available
 (Font)              Font shape `T1/lmss/m/sl' tried instead on input line 707.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [43
 
 ]
-<survie_files/figure-beamer/unnamed-chunk-17-1.pdf, id=3474, 722.7pt x 361.35pt>
+<survie_files/figure-beamer/unnamed-chunk-17-1.pdf, id=3883, 722.7pt x 361.35pt>
 File: survie_files/figure-beamer/unnamed-chunk-17-1.pdf Graphic file (type pdf)
 <use survie_files/figure-beamer/unnamed-chunk-17-1.pdf>
 Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-17-1.pdf  used on input line 736.
 (pdftex.def)             Requested size: 147.4928pt x 73.7464pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [44
 
- <./survie_files/figure-beamer/unnamed-chunk-17-1.pdf>] [45
+ <./survie_files/figure-beamer/unnamed-chunk-17-1.pdf>]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[45
 
 ]
 Overfull \hbox (6.35037pt too wide) in paragraph at lines 786--786
@@ -1127,6 +1357,11 @@ Overfull \hbox (11.56511pt too wide) in paragraph at lines 786--786
 
 Overfull \hbox (11.78755pt too wide) in paragraph at lines 786--786
  []|\T1/lmss/m/n/6 (-20) Exp_deaths_female|
+ []
+
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
  []
 
 [46
@@ -1166,35 +1401,189 @@ Overfull \hbox (11.78755pt too wide) in paragraph at lines 824--824
  []|\T1/lmss/m/n/6 (-20) Exp_deaths_female|
  []
 
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
 [47
 
-] [48
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [49
+[48
 
-] [50
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [51
+[49
 
-] [52
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [53
+[50
 
-] [54
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [55
+[51
 
-] [56
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [57
+[52
 
-] [58
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [59
+[53
 
-] [60
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
 
-] [61
+[54
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[55
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[56
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[57
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[58
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[59
+
+]
+<survie_files/figure-beamer/unnamed-chunk-21-1.pdf, id=5232, 722.7pt x 289.08pt>
+File: survie_files/figure-beamer/unnamed-chunk-21-1.pdf Graphic file (type pdf)
+<use survie_files/figure-beamer/unnamed-chunk-21-1.pdf>
+Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-21-1.pdf  used on input line 980.
+(pdftex.def)             Requested size: 307.2923pt x 122.91692pt.
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[60
+
+ <./survie_files/figure-beamer/unnamed-chunk-21-1.pdf>]
+<survie_files/figure-beamer/unnamed-chunk-22-1.pdf, id=5322, 722.7pt x 289.08pt>
+File: survie_files/figure-beamer/unnamed-chunk-22-1.pdf Graphic file (type pdf)
+<use survie_files/figure-beamer/unnamed-chunk-22-1.pdf>
+Package pdftex.def Info: survie_files/figure-beamer/unnamed-chunk-22-1.pdf  used on input line 998.
+(pdftex.def)             Requested size: 307.2923pt x 122.91692pt.
+
+Overfull \vbox (11.16487pt too high) detected at line 998
+ []
+
+
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[61
+
+ <./survie_files/figure-beamer/unnamed-chunk-22-1.pdf>]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[62
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[63
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[64
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[65
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[66
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[67
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[68
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[69
+
+]
+Overfull \hbox (20.21312pt too wide) has occurred while \output is active
+  [] [][][][][][] [][][][][][] [][][][][][][][][][][] [][][][][] [][][][][][][][] [][][][][][][][][][] [][][][][][][] [][][][][][][][][][][][][][][][][][][][][][][][]  
+ []
+
+[70
 
 ]
 \tf@nav=\write7
@@ -1211,18 +1600,18 @@ Package rerunfilecheck Info: File `survie.out' has not changed.
 (rerunfilecheck)             Checksum: E21F2963D5F768BE30B854ED717B1B10;809.
  ) 
 Here is how much of TeX's memory you used:
- 26416 strings out of 480216
- 514976 string characters out of 5894809
- 852914 words of memory out of 5000000
- 43495 multiletter control sequences out of 15000+600000
- 549282 words of font info for 148 fonts, out of 8000000 for 9000
+ 26501 strings out of 480216
+ 516795 string characters out of 5894809
+ 864682 words of memory out of 5000000
+ 43530 multiletter control sequences out of 15000+600000
+ 555910 words of font info for 160 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  99i,19n,104p,1003b,779s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}</home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt8.pfb>
-Output written on survie.pdf (61 pages, 601205 bytes).
+{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/thomas/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}</home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss12.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmss9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsso9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></home/thomas/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt8.pfb>
+Output written on survie.pdf (70 pages, 693802 bytes).
 PDF statistics:
- 4969 PDF objects out of 5155 (max. 8388607)
- 4719 compressed objects within 48 object streams
- 183 named destinations out of 1000 (max. 500000)
- 47261 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 6318 PDF objects out of 7423 (max. 8388607)
+ 6031 compressed objects within 61 object streams
+ 210 named destinations out of 1000 (max. 500000)
+ 51367 words of extra memory for PDF output out of 51595 (max. 10000000)
 
